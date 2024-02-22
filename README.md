@@ -16,3 +16,14 @@ docker compose up # localhost:12000
 2. Set the provider of the datasource block in schema.prisma to match your database: postgresql, mysql, sqlite, sqlserver, mongodb or cockroachdb.
 3. Run `npx prisma db pull` to turn your database schema into a Prisma schema.
 4. Run `npx prisma generate` to generate the Prisma Client. You can then start querying your database.
+
+## 命名規則
+### ファイル内
+#### 変数、関数
+- camelCase
+
+#### コンポーネント、type、class、interface、enum
+- PascalCase
+
+### ファイル名
+- camelCase
