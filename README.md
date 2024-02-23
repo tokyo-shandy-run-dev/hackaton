@@ -27,3 +27,16 @@ docker compose up # localhost:12000
 
 ### ファイル名
 - camelCase
+
+## ブランチ
+基本名前のブランチを使う
+developから自分の名前のブランチを切る
+developにマージするときはプルリクエストを使う
+developからmainにマージされるとそのままデプロイされる
+
+- main
+- develop
+- ueyama
+- tayu
+- yuta
+- icyou
