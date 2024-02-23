@@ -1,20 +1,13 @@
 'use client';
 
-import { 
-  UIProvider, 
-  Button,
-} from "@yamada-ui/react";
+import { UIProvider } from "@yamada-ui/react";
 import { Calendar } from "@yamada-ui/calendar";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { TimeStatsTable } from "../ui/table";
 
 export default function Home() {
   const [isDragging, setIsDragging] = useState(false);
   const [calendarValue, setCalendarValue] = useState();
-
-  const handleSubmit = () => {
-    console.log('submit');
-  }
 
   return (
     <UIProvider >
@@ -28,7 +21,6 @@ export default function Home() {
         isDragging={isDragging}
         setIsDragging={setIsDragging}
       />
-      <Button onClick={handleSubmit}>決定</Button>
     </UIProvider>
   );
 }

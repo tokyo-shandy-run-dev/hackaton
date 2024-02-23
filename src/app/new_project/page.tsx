@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Calendar } from "@yamada-ui/calendar";
 import { 
   VStack,
+  HStack,
   Card,
   CardHeader,
   CardBody,
@@ -36,33 +37,44 @@ export default function Page() {
 
   return (
     <UIProvider>
-      <Card>
-        <CardHeader>
-          <Heading size="xl">新規プロジェクトの作成</Heading>
+      <Card className="max-w-xl mx-auto mt-10 overflow-hidden">
+        <CardHeader bgGradient="linear(to-l, #7928CA, #FF0080)" className="bg-blue-500 px-5 py-4">
+          <Heading  className="text-white">新規プロジェクトの作成</Heading>
         </CardHeader>
-        <CardBody>
-          <Heading size="md">プロジェクト名を入力</Heading>
-          <Input 
-            type="text" 
-            placeholder="project name" 
-            value={projectName}
-            onChange={handleProjectNameChange}
-          />
-          <Heading size="md">プロジェクトの日程を選択</Heading>
-          <Calendar
-              enableRange
-              value={calendarValue}
-              onChange={setCalendarValue}
-          />
-          <Heading size="md">集まりたい合計時間を入力</Heading>
-          <Input 
-            type="number" 
-            placeholder="total time"
-            value={totalTime}
-            onChange={handleTotalTimeChange}
-          />
+        <CardBody className="p-6">
+          <HStack>
+            <VStack>
+              <Heading size="md">プロジェクト名を入力</Heading>
+              <Input 
+                className="shadow"
+                type="text" 
+                placeholder="project name" 
+                value={projectName}
+                onChange={handleProjectNameChange}
+              />
+              <Heading size="md">集まりたい合計時間を入力</Heading>
+              <Input 
+                className="shadow"
+                type="number" 
+                placeholder="total time"
+                value={totalTime}
+                onChange={handleTotalTimeChange}
+              />
+            </VStack>
+            <VStack>
+              <Heading size="md">プロジェクトの日程を選択</Heading>
+              <Calendar
+                  enableRange
+                  value={calendarValue}
+                  onChange={setCalendarValue}
+              />
+            </VStack>
+          </HStack>
           <VStack>
-            <Button onClick={handleSubmit}>次へ</Button>
+            <Button 
+              onClick={handleSubmit}
+              colorScheme='primary'
+            >次へ</Button>
           </VStack>
         </CardBody>
       </Card>

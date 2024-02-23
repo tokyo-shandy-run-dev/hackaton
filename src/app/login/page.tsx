@@ -40,16 +40,17 @@ export default function Page() {
   
   return (
     <UIProvider>
-      <Card>
-        <CardHeader>
-          <Heading>ログイン</Heading>
+      <Card className="max-w-md mx-auto mt-10 overflow-hidden">
+        <CardHeader bgGradient="linear(to-l, #7928CA, #FF0080)" className="bg-blue-500 px-5 py-4">
+          <Heading className="text-white">ログイン</Heading>
         </CardHeader>
-        <CardBody>
+        <CardBody className="p-6">
           <VStack>
             <FormControl
               label="ニックネーム"
             >
               <Input 
+                className="shadow"
                 type="text" 
                 placeholder="user name" 
                 value={name}
@@ -60,6 +61,7 @@ export default function Page() {
               label="メールアドレス"
             >
               <Input 
+                className="shadow"
                 type="email" 
                 placeholder="email" 
                 value={email}
@@ -70,13 +72,17 @@ export default function Page() {
               label="パスワード"
             >
               <Input 
+                className="shadow"
                 type="password" 
                 placeholder="password" 
                 value={password}
                 onChange={handelPasswordChange}
               />
             </FormControl>
-            <Button onClick={handleSubmit}>ログイン</Button>
+            <Button 
+              onClick={handleSubmit}
+              colorScheme='primary'
+            >ログイン</Button>
           </VStack>
         </CardBody>
       </Card>
