@@ -1,6 +1,5 @@
 'use client';
 
-import { UIProvider } from "@yamada-ui/react";
 import { Calendar } from "@yamada-ui/calendar";
 import { useState } from "react";
 import { TimeStatsTable } from "../ui/table";
@@ -10,7 +9,7 @@ export default function Home() {
   const [calendarValue, setCalendarValue] = useState();
 
   return (
-    <UIProvider >
+    <div>
       <Calendar
         enableRange
         value={calendarValue}
@@ -21,6 +20,6 @@ export default function Home() {
         isDragging={isDragging}
         setIsDragging={setIsDragging}
       />
-    </UIProvider>
+    </div>
   );
 }

@@ -5,7 +5,7 @@ import { Table } from "@yamada-ui/table";
 export function TimeStatsTable({ calendarValue, isDragging, setIsDragging }) {
   const [startRow, setStartRow] = useState('');
   const [startColumn, setStartColumn] = useState('');
-  const [currentStatus, setCurrentStatus] = useState(0);
+  const [currentStatus, setCurrentStatus] = useState(2);
   const [cellStatuses, setCellStatuses] = useState([]);
   const [sched, setSched] = useState([]);
   
@@ -112,9 +112,27 @@ export function TimeStatsTable({ calendarValue, isDragging, setIsDragging }) {
       <CardBody className="p-6">
         <Text fontSize="xs">ご都合にあった利用マークを選択し、タイムラインをクリックまたはドラッグすると予定が入力できます。</Text>
         <HStack>
-          <Button colorScheme="success" size="md" onClick={() => setCurrentStatus(2)}>可</Button>
-          <Button colorScheme="warning" size="md" onClick={() => setCurrentStatus(1)}>未定</Button>
-          <Button colorScheme="danger" size="md" onClick={() => setCurrentStatus(0)}>不可</Button>
+          <Button 
+            variant={currentStatus === 2 ? "solid" : "outline"}
+            colorScheme="success" 
+            size="md" 
+            onClick={() => setCurrentStatus(2)}>
+            可
+          </Button>
+          <Button 
+            variant={currentStatus === 1 ? "solid" : "outline"}
+            colorScheme="warning" 
+            size="md" 
+            onClick={() => setCurrentStatus(1)}>
+            未定
+          </Button>
+          <Button 
+            variant={currentStatus === 0 ? "solid" : "outline"}
+            colorScheme="danger" 
+            size="md" 
+            onClick={() => setCurrentStatus(0)}>
+            不可
+          </Button>
         </HStack>
         <VStack>
           <TableContainer>
