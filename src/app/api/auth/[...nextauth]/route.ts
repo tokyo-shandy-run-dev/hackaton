@@ -1,21 +1,6 @@
+import { options } from "./options";
 import NextAuth from "next-auth";
 
-export default NextAuth({
-  providers: [],
+const handler = NextAuth(options);
 
-  secret: process.env.SECRET,
-
-  session: {
-    strategy: "jwt",
-  },
-
-  jwt: {},
-
-  pages: {},
-
-  callbacks: {},
-
-  events: {},
-
-  debug: false,
-});
+export { handler as GET, handler as POST };
