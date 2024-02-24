@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { TimeStateSchema } from '@/types/timeState';
+import { IDSchema } from '@/types/id';
 import { TimeState } from '@prisma/client';
 import { extractBody } from "@/lib/extractBody";
 import { db } from '@/lib/prisma';
@@ -7,11 +8,11 @@ import { db } from '@/lib/prisma';
 //// ユーザーの予定を取得できる(変更するときの確認とかとか)
 // res : timestate?
 export async function GET(req: NextRequest) : Promise<Response>{
-  const timeState  = await extractBody(req, TimeStateSchema);
-  if (timeState instanceof Response) return timeState;
+  const id  = await extractBody(req, IDSchema);
+  if (id instanceof Response) return id;
   const userSchedule= await db.timeState.findUnique({
     where: {
-      id: timeState.id
+      id: id
     }
   });
   if (userSchedule != null) {
