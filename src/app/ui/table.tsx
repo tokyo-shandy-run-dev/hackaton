@@ -1,9 +1,19 @@
 import { useMemo, useState } from "react";
-import { TableContainer, Card, CardHeader, CardBody, Heading, Button, VStack, HStack, Text } from "@yamada-ui/react";
+import {
+  TableContainer,
+  Card,
+  CardHeader,
+  CardBody,
+  Heading,
+  Button,
+  VStack,
+  HStack,
+  Text,
+} from "@yamada-ui/react";
 import { Table } from "@yamada-ui/table";
 
 type TimeStatsTableProps = {
-  calendarValue: Date[] | undefined;
+  calendarValue: Date[];
   isDragging: boolean;
   setIsDragging: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -14,8 +24,11 @@ export function TimeStatsTable({ calendarValue, isDragging, setIsDragging }: Tim
   const [currentStatus, setCurrentStatus] = useState(2);
   const [cellStatuses, setCellStatuses] = useState<number[][]>([]);
   const [sched, setSched] = useState<number[][]>([]);
-  
-  const generateDateSlots = (startDate: Date, endDate: Date) => {
+
+  const generateDateSlots = (startDate: Date | undefined, endDate: Date | undefined) => {
+    if (startDate === undefined) return [];
+    if (endDate === undefined) return [startDate];
+
     const dates = [];
     let currentDate = new Date(startDate.getTime());
     while (currentDate <= endDate) {
@@ -42,7 +55,7 @@ export function TimeStatsTable({ calendarValue, isDragging, setIsDragging }: Tim
         accessorKey: "timeSlot",
         width: "16px",
       },
-      ...generateTimeSlots.map(timeSlot => ({
+      ...generateTimeSlots.map((timeSlot) => ({
         header: () => <div className="select-none">{timeSlot}</div>,
         accessorKey: timeSlot,
       })),
@@ -55,10 +68,12 @@ export function TimeStatsTable({ calendarValue, isDragging, setIsDragging }: Tim
   };
 
   const data = useMemo(() => {
-    const dates = calendarValue ? generateDateSlots(calendarValue[0], calendarValue[1]) : [];
-    return dates.map(date => {
-      const rowData: RowData = { timeSlot: date.toLocaleDateString("ja-JP", { month: "numeric", day: "numeric" }) };
-      generateTimeSlots.forEach(timeSlot => {
+    const dates = generateDateSlots(calendarValue[0], calendarValue[1]);
+    return dates.map((date) => {
+      const rowData: RowData = {
+        timeSlot: date.toLocaleDateString("ja-JP", { month: "numeric", day: "numeric" }),
+      };
+      generateTimeSlots.forEach((timeSlot) => {
         rowData[timeSlot] = "";
       });
       return rowData;
@@ -67,7 +82,7 @@ export function TimeStatsTable({ calendarValue, isDragging, setIsDragging }: Tim
 
   useMemo(() => {
     setCellStatuses(data.map(() => Array(columns.length).fill(0)));
-  }, [data, columns])
+  }, [data, columns]);
 
   const handleMouseDown = (rowId: number, colId: number) => {
     if (colId === 99) return;
@@ -75,21 +90,21 @@ export function TimeStatsTable({ calendarValue, isDragging, setIsDragging }: Tim
     setStartRow(rowId);
     setStartColumn(colId);
     setSched(cellStatuses);
-  }
+  };
 
   const handleMouseOver = (rowId: number, colId: number) => {
     if (!isDragging || colId === 99) return;
-  
+
     const startRowId = startRow!;
     const startColId = startColumn!;
-  
+
     const minRowIndex = Math.min(startRowId, rowId);
     const maxRowIndex = Math.max(startRowId, rowId);
     const minColId = Math.min(startColId, colId);
     const maxColId = Math.max(startColId, colId);
-  
+
     setCellStatuses(() => {
-      const newStatuses = sched.map(row => [...row]);
+      const newStatuses = sched.map((row) => [...row]);
       for (let i = minRowIndex; i <= maxRowIndex; i++) {
         for (let j = minColId; j <= maxColId; j++) {
           newStatuses[i][j] = currentStatus;
@@ -106,14 +121,14 @@ export function TimeStatsTable({ calendarValue, isDragging, setIsDragging }: Tim
 
   const handleClick = (rowId: number, colId: number) => {
     if (colId === 99) return;
-    const newStatuses = sched.map(row => [...row]);
+    const newStatuses = sched.map((row) => [...row]);
     newStatuses[rowId][colId] = currentStatus;
     setCellStatuses(newStatuses);
   };
 
   const handleSubmit = () => {
-    console.log('submit');
-  }
+    console.log("submit");
+  };
 
   return (
     <Card className="max-w-4xl mx-auto mt-10 overflow-hidden">
@@ -121,27 +136,32 @@ export function TimeStatsTable({ calendarValue, isDragging, setIsDragging }: Tim
         <Heading className="text-white">あなたの予定</Heading>
       </CardHeader>
       <CardBody className="p-6">
-        <Text fontSize="xs">ご都合にあった利用マークを選択し、タイムラインをクリックまたはドラッグすると予定が入力できます。</Text>
+        <Text fontSize="xs">
+          ご都合にあった利用マークを選択し、タイムラインをクリックまたはドラッグすると予定が入力できます。
+        </Text>
         <HStack>
-          <Button 
+          <Button
             variant={currentStatus === 2 ? "solid" : "outline"}
-            colorScheme="success" 
-            size="md" 
-            onClick={() => setCurrentStatus(2)}>
+            colorScheme="success"
+            size="md"
+            onClick={() => setCurrentStatus(2)}
+          >
             可
           </Button>
-          <Button 
+          <Button
             variant={currentStatus === 1 ? "solid" : "outline"}
-            colorScheme="warning" 
-            size="md" 
-            onClick={() => setCurrentStatus(1)}>
+            colorScheme="warning"
+            size="md"
+            onClick={() => setCurrentStatus(1)}
+          >
             未定
           </Button>
-          <Button 
+          <Button
             variant={currentStatus === 0 ? "solid" : "outline"}
-            colorScheme="danger" 
-            size="md" 
-            onClick={() => setCurrentStatus(0)}>
+            colorScheme="danger"
+            size="md"
+            onClick={() => setCurrentStatus(0)}
+          >
             不可
           </Button>
         </HStack>
@@ -150,7 +170,7 @@ export function TimeStatsTable({ calendarValue, isDragging, setIsDragging }: Tim
             <Table
               variant="striped"
               size="sm"
-              columns={columns} 
+              columns={columns}
               data={data}
               enableRowSelection={false}
               enableSorting={false}
@@ -159,10 +179,10 @@ export function TimeStatsTable({ calendarValue, isDragging, setIsDragging }: Tim
                 const rowId = parseInt(row.id);
                 const colId = column.id === "timeSlot" ? 99 : parseInt(column.id);
                 const status = cellStatuses[rowId][colId];
-                let bgColor = 'inherit';
-                if (status === 2) bgColor = '#3cc360';
-                else if (status === 1) bgColor = '#f97415';
-                else if (status === 0) bgColor = '#ea4334';
+                let bgColor = "inherit";
+                if (status === 2) bgColor = "#3cc360";
+                else if (status === 1) bgColor = "#f97415";
+                else if (status === 0) bgColor = "#ea4334";
 
                 return {
                   onMouseDown: () => handleMouseDown(rowId, colId),
@@ -173,14 +193,13 @@ export function TimeStatsTable({ calendarValue, isDragging, setIsDragging }: Tim
                   style: {
                     backgroundColor: bgColor,
                   },
-                }
+                };
               }}
             />
           </TableContainer>
-          <Button 
-            onClick={handleSubmit}
-            colorScheme='primary'
-          >決定</Button>
+          <Button onClick={handleSubmit} colorScheme="primary">
+            決定
+          </Button>
         </VStack>
       </CardBody>
     </Card>
