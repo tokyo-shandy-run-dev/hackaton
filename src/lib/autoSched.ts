@@ -1,10 +1,15 @@
 import { TimeRange } from "@/types/timeRange";
-import { ignoreDuplicateTimeState, sumTime, validateTimeState } from "@/types/timeState";
+import {
+  extractOkTimeState as extractOkTimeStatus,
+  sumTime,
+  validateTimeState,
+} from "@/types/timeState";
 import { TimeState } from "@prisma/client";
 
 type Input = {
   timeStatus: TimeState[];
   duration: TimeRange;
+  totalHours: number;
 };
 
 type Schedule = {
@@ -28,5 +33,16 @@ function validation(data: Input): boolean {
 export function autoSched(data: Input): Schedule[] | Error {
   if (!validation(data)) return Error("Invalid input");
 
-  const timeStatus = ignoreDuplicateTimeState(data.timeStatus);
+  const okTimeStatus = extractOkTimeStatus(data.timeStatus);
+
+  // 一日あたりの集まる時間
+  const oneDayGoalHours =
+    data.totalHours / data.duration.end.getHours() - data.duration.start.getHours();
+
+  const timeStatusPerDay = splitTimeStatusPerDay(okTimeStatus);
+
+  for (const timeStatus of timeStatusPerDay) {
+    let targetGoalHours = oneDayGoalHours;
+
+  }
 }

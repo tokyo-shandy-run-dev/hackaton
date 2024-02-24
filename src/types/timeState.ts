@@ -28,7 +28,29 @@ export function sumTime(timeStatus: TimeState[]): number {
 export function ignoreDuplicateTimeState(timeStatus: TimeState[]): TimeState[] {
   const result: Map<Date, TimeState> = new Map();
   for (const timeState of timeStatus) {
-    if (!result.has(timeState.time_start)) result.set(timeState.time_start, timeState);
+    result.set(timeState.time_start, timeState);
+    console.log(result);
   }
   return Array.from(result.values());
+}
+
+/**
+ * timeStatusのstatusがokのものだけを抽出
+ * @param timeStatus
+ * @returns okのDateの一時間おきのリスト
+ */
+export function extractOkTimeState(timeStatus: TimeState[]): Date[] {
+  const list: Map<Date, TimeState["status"]> = new Map();
+  for (const timeState of timeStatus) {
+    list.set(
+      timeState.time_start,
+      list.get(timeState.time_start) == "ng" ? "ng" : timeState.status
+    );
+  }
+
+  const result: Date[] = [];
+  list.forEach((status, date) => {
+    if (status == "ok") result.push(date);
+  });
+  return result;
 }

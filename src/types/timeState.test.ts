@@ -1,13 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { ignoreDuplicateTimeState, sumTime, validateTimeState } from "./timeState";
+import {
+  extractOkTimeState,
+  ignoreDuplicateTimeState,
+  sumTime,
+  validateTimeState,
+} from "./timeState";
 import { TimeState } from "@prisma/client";
 
-function timeState(start: Date): TimeState {
+function timeState(start: Date, status?: "ok" | "ng"): TimeState {
   return {
     createdAt: new Date(),
     id: 1,
     projectId: 1,
-    status: "status",
+    status: status ?? "ok",
     time_start: start,
     userId: 1,
   };
@@ -90,5 +95,37 @@ describe("sumTime", () => {
         timeState(new Date(2020, 1, 1, 2)),
       ])
     ).toBe(2);
+  });
+});
+
+describe("extractOkTimeState", () => {
+  it("simple", () => {
+    expect(
+      extractOkTimeState([
+        timeState(new Date(2020, 1, 1, 1), "ok"),
+        timeState(new Date(2020, 1, 1, 2), "ok"),
+        timeState(new Date(2020, 1, 1, 3), "ng"),
+      ])
+    ).toStrictEqual([new Date(2020, 1, 1, 1), new Date(2020, 1, 1, 2)]);
+  });
+
+  it("with duplicate", () => {
+    expect(
+      extractOkTimeState([
+        timeState(new Date(2020, 1, 1, 1), "ok"),
+        timeState(new Date(2020, 1, 1, 1), "ok"),
+        timeState(new Date(2020, 1, 1, 2), "ok"),
+      ])
+    ).toStrictEqual([new Date(2020, 1, 1, 1), new Date(2020, 1, 1, 2)]);
+  });
+
+  it("with ng duplicate", () => {
+    expect(
+      extractOkTimeState([
+        timeState(new Date(2020, 1, 1, 1), "ok"),
+        timeState(new Date(2020, 1, 1, 1), "ng"),
+        timeState(new Date(2020, 1, 1, 1), "ng"),
+      ])
+    ).toStrictEqual([]);
   });
 });

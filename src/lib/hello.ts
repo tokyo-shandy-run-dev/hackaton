@@ -11,10 +11,12 @@ const prisma = new PrismaClient();
 
 const TimeStateSchema = z.object({
   id: z.number(),
-  state: z.string(),
-  time: z.date(),
+  status: z.union([z.literal("ok"), z.literal("?"), z.literal("ng")]),
+  time_start: z.date(),
   projectId: z.number(),
-});
+  createdAt: z.date(),
+  userId: z.number().nullable(),
+}) satisfies z.ZodType<TimeState>;
 
 const ProjectResponseSchema = z.object({
   id: z.number(),
