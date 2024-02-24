@@ -57,15 +57,13 @@ async function putTimestate(timeState: TimeState): Promise<Response> {
         },
         update: {
           status: timeState.status,
-          updatedAt: new Date()
         },
         create: {
           status: timeState.status,
           userId: timeState.userId,
           projectId: timeState.projectId,
-          time: timeState.time_start,
+          time_start: timeState.time_start,
           createdAt: new Date(), //Dateの処理 要相談？
-          updatedAt: new Date()
         }
   });
   return new Response("completed put data", { status: 200 });
