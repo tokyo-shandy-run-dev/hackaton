@@ -5,6 +5,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ```sh
 npm ci
 npx supabase start
+npx prisma db push # dbを初期化するので、初期化したくない場合は実行しない
 docker compose up # localhost:12000
 ```
 
