@@ -1,5 +1,7 @@
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { extractBody } from "@/lib/extractBody";
+import { db } from "@/lib/prisma";
+import { CreateUserSchema } from "@/types/createUser";
 import { UserSchema } from "@/types/user";
 import { User } from "@prisma/client";
 import { getServerSession } from "next-auth";
@@ -23,12 +25,10 @@ export async function GET(): Promise<NextResponse<Omit<User, "password">> | Resp
 }
 
 export async function POST(req: NextRequest): Promise<Response> {
-  const user = await extractBody(req, UserSchema);
-  // if (user instanceof Response) return user;
+  const user = await extractBody(req, CreateUserSchema);
+  db.user.create({ data: user });
 
-  // insertToDB(user);
-
-  return new Response("Not implemented", { status: 501 });
+  return new Response(null, { status: 204 });
 }
 
 export async function PUT(): Promise<Response> {
