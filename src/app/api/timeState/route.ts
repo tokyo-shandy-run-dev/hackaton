@@ -1,44 +1,72 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { TimeStateSchema } from '@/lib/timeState';
+import { TimeStateSchema } from '@/types/timeState';
 import { TimeState } from '@prisma/client';
-// import { getServerSession } from '@lib/auth/server';
-import { PrismaClient } from '@prisma/client';
-// import { getProjectId } from '@lib/project/server';
-
-const prisma = new PrismaClient();
+import { extractBody } from "@/lib/extractBody";
+import { db } from '@/lib/prisma';
 
 //// ユーザーの予定を取得できる(変更するときの確認とかとか)
 // res : timestate?
-export async function get(req: NextRequest) : Promise<Response>{
-  const userId: number = 1; // getUserId();
-  const projectId: number = 1; // getProjectId();
-  const userSchedule: TimeState[] | null = await prisma.timeState.findMany({
-    where: {userId: userId,
-      projectId: projectId
+export async function GET(req: NextRequest) : Promise<Response>{
+  const timeState  = await extractBody(req, TimeStateSchema);
+  if (timeState instanceof Response) return timeState;
+  const userSchedule= await db.timeState.findUnique({
+    where: {
+      id: timeState.id
     }
   });
-  return NextResponse.json(userSchedule);
+  if (userSchedule != null) {
+    return new Response(JSON.stringify(userSchedule), { status: 200 });
+  }
+  return new Response("bad request", { status: 400 });
 }
 
-//// 最初の登録の時に使う？　時間毎に新規登録する？どっち？
-// req : timeState？
-export async function post(req: NextRequest, res: NextResponse) {
-  
+//// 時間毎に新規登録する
+// req : timeState
+export async function POST(req: NextRequest) : Promise<Response> {
+  const timeState  = await extractBody(req, TimeStateSchema);
+  if (timeState instanceof Response) return timeState;
+  const newTimeState = await putTimestate(timeState);
+  return newTimeState;
 }
 
 //// 予定の一部x おそらく状態保存がそのまま渡される感じ？
 // req: timeState?
-export async function put(req: NextRequest, res: NextResponse) {
-  
+export async function PUT(req: NextRequest, res: NextResponse) {
+  const timeState  = await extractBody(req, TimeStateSchema);
+  if (timeState instanceof Response) return timeState;
+  const updatedTimeState = await putTimestate(timeState);
+  return updatedTimeState;
 }
 
 //// 予定を削除する
-export async function del(req: NextRequest, res: NextResponse) {
-  
+export async function DELETE(req: NextRequest): Promise<Response> {
+  const timeState  = await extractBody(req, TimeStateSchema);
+  if (timeState instanceof Response) return timeState;
+  await db.timeState.delete({
+    where: {
+      id: timeState.id
+    }
+  });
+  return new Response("completed delete data", { status: 200 });
 }
 
-async function putTimestate(id: number): Promise<TimeState | null> {
-    return await prisma.timeState.findUnique({
-        where: { id: id },
-    });
+async function putTimestate(timeState: TimeState): Promise<Response> {
+  const update  = await db.timeState.upsert({
+        where: { 
+          id: timeState.id
+        },
+        update: {
+          status: timeState.status,
+          updatedAt: new Date()
+        },
+        create: {
+          status: timeState.status,
+          userId: timeState.userId,
+          projectId: timeState.projectId,
+          time: timeState.time_start,
+          createdAt: new Date(), //Dateの処理 要相談？
+          updatedAt: new Date()
+        }
+  });
+  return new Response("completed put data", { status: 200 });
 }
