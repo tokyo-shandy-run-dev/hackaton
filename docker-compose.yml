@@ -10,10 +10,10 @@ services:
     command: sh -c "npm run dev"
     networks:
       - default
-      - supabase_network_docker_test
+      - supabase_network_hackaton
 
 volumes:
   node_modules:
 networks:
-  supabase_network_docker_test:
+  supabase_network_hackaton:
     external: true
