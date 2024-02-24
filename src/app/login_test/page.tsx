@@ -14,9 +14,16 @@ const Page = () => {
   console.log(process.env.NEXTAUTH_URL);
 
   useEffect(() => {
-    fetch("/api/user")
-      .then((response) => response.json())
-      .then((data) => setApiResponse(data));
+    const f = async () => {
+      {
+        const res = await fetch("/api/user");
+        if (res.ok) {
+          const data = await res.json();
+          setApiResponse(data);
+        }
+      }
+    };
+    f();
   }, [session]);
 
   return (
@@ -27,6 +34,37 @@ const Page = () => {
       <br />
       <Button onClick={() => signOut()}>Logout</Button>
       <br />
+      <Button
+        onClick={async () => {
+          {
+            const res = await fetch("/api/user", {
+              method: "POST",
+              body: JSON.stringify({
+                name: "cou723",
+                email: null,
+                password: null,
+              }),
+            });
+            console.log("res", res);
+            console.log("data", await res.text());
+          }
+        }}
+      >
+        Add Account
+      </Button>
+      <br />
+      <Button
+        onClick={async () => {
+          const res = await fetch("/api/user", {
+            method: "DELETE",
+          });
+          console.log("res", res);
+          console.log("data", await res.text());
+          // signOut();
+        }}
+      >
+        Delete Me
+      </Button>
       <div>{JSON.stringify(apiResponse)}</div>
     </Box>
   );
