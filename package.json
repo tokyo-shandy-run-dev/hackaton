@@ -15,6 +15,7 @@
     "@prisma/client": "^5.10.2",
     "@supabase/supabase-js": "^2.39.7",
     "@yamada-ui/calendar": "^1.1.9",
+    "@yamada-ui/fontawesome": "^1.0.12",
     "@yamada-ui/react": "^1.2.6",
     "@yamada-ui/table": "^1.0.17",
     "next": "14.1.0",
@@ -22,6 +23,7 @@
     "prisma": "^5.10.2",
     "react": "^18",
     "react-dom": "^18",
+    "react-icons": "^5.0.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
