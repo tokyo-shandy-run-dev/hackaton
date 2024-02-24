@@ -17,15 +17,15 @@ export default function Page() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handelNameChange = (e) => {
+  const handelNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
 
-  const handelEmailChange = (e) => {
+  const handelEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
-  const handelPasswordChange = (e) => {
+  const handelPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 

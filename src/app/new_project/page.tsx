@@ -15,15 +15,15 @@ import {
 
 export default function Page() {
   const [projectName, setProjectName] = useState('');
-  const [calendarValue, setCalendarValue] = useState();
-  const [totalTime, setTotalTime] = useState();
+  const [calendarValue, setCalendarValue] = useState<Date[]>();
+  const [totalTime, setTotalTime] = useState<number>();
 
-  const handleProjectNameChange = (e) => {
+  const handleProjectNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setProjectName(e.target.value);
   };
 
-  const handleTotalTimeChange = (e) => {
-    setTotalTime(e.target.value);
+  const handleTotalTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTotalTime(parseInt(e.target.value));
   };
 
   const handleSubmit = () => {
