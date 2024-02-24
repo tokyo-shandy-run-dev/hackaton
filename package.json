@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "vercel-build": "prisma generate && prisma migrate deploy && next build",
+    "prisma:generate": "prisma generate",
     "test": "vitest"
   },
   "dependencies": {
@@ -16,6 +18,7 @@
     "@yamada-ui/react": "^1.2.6",
     "@yamada-ui/table": "^1.0.17",
     "next": "14.1.0",
+    "next-auth": "^4.24.6",
     "prisma": "^5.10.2",
     "react": "^18",
     "react-dom": "^18",
