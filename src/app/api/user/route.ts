@@ -26,7 +26,14 @@ export async function GET(): Promise<NextResponse<Omit<User, "password">> | Resp
 
 export async function POST(req: NextRequest): Promise<Response> {
   const user = await extractBody(req, CreateUserSchema);
-  db.user.create({ data: user });
+  if (user instanceof Response) return user;
+  db.user.create({
+    data: {
+      email: user.email,
+      password: user.password,
+      name: user.name,
+    },
+  });
 
   return new Response(null, { status: 204 });
 }
