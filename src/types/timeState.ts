@@ -3,11 +3,9 @@ import { z } from "zod";
 
 export const TimeStateSchema = z.object({
     id: z.number(),
-    userId: z.number().nullable(),
-    projectId: z.number().nullable(),
-    time_start: z.date(), // startTimeをtime_startに変更
-    status: z.string(), // statusフィールドを追加
+    time_start: z.date(), 
+    status: z.string(),
     createdAt: z.date(),
-    updatedAt: z.date(),
+    projectOnUserId: z.number(),
 }) satisfies z.ZodType<TimeState>;
 
