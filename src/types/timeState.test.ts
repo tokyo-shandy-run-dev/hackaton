@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   extractOkTimeState,
   ignoreDuplicateTimeState,
+  splitTimeStatusPerDay,
   sumTime,
   validateTimeState,
 } from "./timeState";
@@ -9,7 +10,7 @@ import { TimeState } from "@prisma/client";
 
 function timeState(start: Date, status?: "ok" | "ng"): TimeState {
   return {
-    createdAt: new Date(),
+    createdAt: new Date(2021, 1, 1),
     id: 1,
     projectId: 1,
     status: status ?? "ok",
@@ -127,5 +128,36 @@ describe("extractOkTimeState", () => {
         timeState(new Date(2020, 1, 1, 1), "ng"),
       ])
     ).toStrictEqual([]);
+  });
+});
+
+describe("splitTimeStatusPerDay", () => {
+  it("simple", () => {
+    const date = new Date(2020, 1, 1);
+    const result: Map<string, TimeState[]> = new Map();
+    result.set(date.toISOString(), [
+      timeState(date, "ok"),
+      timeState(date, "ok"),
+      timeState(date, "ok"),
+    ]);
+    expect(
+      splitTimeStatusPerDay([timeState(date, "ok"), timeState(date, "ok"), timeState(date, "ok")])
+    ).toStrictEqual(result);
+  });
+
+  it("multiple", () => {
+    const result: Map<string, TimeState[]> = new Map();
+    result.set(new Date(2020, 1, 1).toISOString(), [
+      timeState(new Date(2020, 1, 1), "ok"),
+      timeState(new Date(2020, 1, 1), "ok"),
+    ]);
+    result.set(new Date(2020, 1, 2).toISOString(), [timeState(new Date(2020, 1, 2), "ok")]);
+    expect(
+      splitTimeStatusPerDay([
+        timeState(new Date(2020, 1, 1), "ok"),
+        timeState(new Date(2020, 1, 1), "ok"),
+        timeState(new Date(2020, 1, 2), "ok"),
+      ])
+    ).toStrictEqual(result);
   });
 });

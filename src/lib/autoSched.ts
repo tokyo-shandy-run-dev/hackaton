@@ -43,6 +43,5 @@ export function autoSched(data: Input): Schedule[] | Error {
 
   for (const timeStatus of timeStatusPerDay) {
     let targetGoalHours = oneDayGoalHours;
-
   }
 }

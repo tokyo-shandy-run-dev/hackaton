@@ -26,9 +26,9 @@ export function sumTime(timeStatus: TimeState[]): number {
 }
 
 export function ignoreDuplicateTimeState(timeStatus: TimeState[]): TimeState[] {
-  const result: Map<Date, TimeState> = new Map();
+  const result: Map<String, TimeState> = new Map();
   for (const timeState of timeStatus) {
-    result.set(timeState.time_start, timeState);
+    result.set(timeState.time_start.toISOString(), timeState);
     console.log(result);
   }
   return Array.from(result.values());
@@ -40,17 +40,30 @@ export function ignoreDuplicateTimeState(timeStatus: TimeState[]): TimeState[] {
  * @returns okのDateの一時間おきのリスト
  */
 export function extractOkTimeState(timeStatus: TimeState[]): Date[] {
-  const list: Map<Date, TimeState["status"]> = new Map();
+  const list: Map<string, TimeState["status"]> = new Map();
   for (const timeState of timeStatus) {
     list.set(
-      timeState.time_start,
-      list.get(timeState.time_start) == "ng" ? "ng" : timeState.status
+      timeState.time_start.toISOString(),
+      list.get(timeState.time_start.toISOString()) == "ng" ? "ng" : timeState.status
     );
   }
 
   const result: Date[] = [];
   list.forEach((status, date) => {
-    if (status == "ok") result.push(date);
+    if (status == "ok") result.push(new Date(date));
   });
+  return result;
+}
+
+export function splitTimeStatusPerDay(timeStatus: TimeState[]): Map<String, TimeState[]> {
+  const result: Map<String, TimeState[]> = new Map();
+  for (const timeState of timeStatus) {
+    const date = timeState.time_start;
+    if (result.has(date.toISOString())) {
+      result.get(date.toISOString())?.push(timeState);
+    } else {
+      result.set(date.toISOString(), [timeState]);
+    }
+  }
   return result;
 }
