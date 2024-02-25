@@ -136,7 +136,7 @@ export function TimeStatsTable({ calendarValue, isDragging, setIsDragging }: Tim
         <Heading className="text-white">あなたの予定</Heading>
       </CardHeader>
       <CardBody className="p-6">
-        <Text fontSize="xs">
+        <Text fontSize="xs" color={["black", "white"]}>
           ご都合にあった利用マークを選択し、タイムラインをクリックまたはドラッグすると予定が入力できます。
         </Text>
         <HStack>
