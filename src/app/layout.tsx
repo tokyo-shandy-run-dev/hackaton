@@ -2,8 +2,30 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "@/app/providers";
+import React from "react";
+import dynamic from "next/dynamic";
 
 const inter = Inter({ subsets: ["latin"] });
+
+const AuthButton = dynamic(() => import("@/components/authButton"), {
+  suspense: true,
+});
+
+const Header = dynamic(() => import("@/components/header"), {
+  suspense: true,
+});
+
+const NewProjectButton = dynamic(() => import("@/components/newProjectButton"), {
+  suspense: true,
+});
+
+const JoinProjectButton = dynamic(() => import("@/components/joinProjectButton"), {
+  suspense: true,
+});
+
+const ColorMode = dynamic(() => import("@/components/colorMode"), {
+  suspense: true,
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,8 +39,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Providers>{children}</Providers>
+      <body className={`${inter.className} flex flex-col md:flex-row`}>
+        <ColorMode/>
+        <Providers>
+          <aside className="min-w-max md:w-64 md:min-h-screen px-3 py-4">
+            <Header/>
+            <div className="flex flex-row md:flex-col md:justify-between py-2 min-w-max">
+              <div className="flex flex-row md:flex-col">
+                <NewProjectButton/>
+                <JoinProjectButton/>
+              </div>
+              <AuthButton/>
+            </div>
+          </aside>
+          <div className="flex-1">
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );

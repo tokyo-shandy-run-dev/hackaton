@@ -76,7 +76,7 @@ export default function Page() {
           <Button 
             onClick={handleSubmit}
             colorScheme='primary'
-          >次へ</Button>
+          >決定</Button>
         </VStack>
       </CardBody>
     </Card>

@@ -13,13 +13,13 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <Calendar enableRange value={calendarValue} onChange={handleCalendarChange} />
+    <div className="px-2">
       <TimeStatsTable
         calendarValue={calendarValue}
         isDragging={isDragging}
         setIsDragging={setIsDragging}
       />
+      <Calendar enableRange value={calendarValue} onChange={handleCalendarChange} />
     </div>
   );
 }
